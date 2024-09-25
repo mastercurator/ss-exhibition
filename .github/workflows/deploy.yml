@@ -92,5 +92,5 @@ jobs:
               -e cos.ap-guangzhou.myqcloud.com \
               --meta="Content-Type:$MIME_TYPE#Content-Disposition:inline" \
               -i $COS_SECRET_ID -k $COS_SECRET_KEY \
-              --delete --init-skip --recursive
+              --init-skip
           done
