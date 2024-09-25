@@ -45,10 +45,15 @@ jobs:
       # Step 4: Install Tencent COS CLI tool
       - name: Install COSCLI
         run: |
-          curl -sSL https://github.com/tencentyun/coscli/releases/download/v0.11.2/coscli-linux-amd64 -o coscli
-          chmod +x coscli
-          sudo mv coscli /usr/local/bin/coscli
-          coscli --version
+          wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-v1.0.1-linux-amd64 -O coscli
+          if file coscli | grep -q "ELF"; then
+            chmod +x coscli
+            sudo mv coscli /usr/local/bin/coscli
+            coscli --version
+          else
+            echo "Download failed or wrong file" >&2
+            exit 1
+          fi
 
       # Step 5: 上传到腾讯云 COS
       - name: Deploy to Tencent COS
