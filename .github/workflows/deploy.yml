@@ -56,6 +56,41 @@ jobs:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
         run: |
-          echo "COS_SECRET_KEY is set to: ${COS_SECRET_KEY:0:5}****"
-          echo "COS_SECRET_KEY is set to: ${COS_SECRET_ID:0:5}****"
-          coscli sync ./public/ cos://$COS_BUCKET/ -e cos.ap-guangzhou.myqcloud.com -i $COS_SECRET_ID -k $COS_SECRET_KEY --delete --init-skip --recursive --meta=x-cos-meta-a:a#Content-Disposition:inline
+          find ./public -type f | while read -r file; do
+            case "${file##*.}" in
+              html)
+                MIME_TYPE="text/html"
+                ;;
+              css)
+                MIME_TYPE="text/css"
+                ;;
+              js)
+                MIME_TYPE="application/javascript"
+                ;;
+              json)
+                MIME_TYPE="application/json"
+                ;;
+              png)
+                MIME_TYPE="image/png"
+                ;;
+              jpg|jpeg)
+                MIME_TYPE="image/jpeg"
+                ;;
+              gif)
+                MIME_TYPE="image/gif"
+                ;;
+              svg)
+                MIME_TYPE="image/svg+xml"
+                ;;
+              *)
+                MIME_TYPE="application/octet-stream"
+                ;;
+            esac
+
+            # 上传文件并设置对应的 MIME 类型
+            coscli cp "$file" cos://$COS_BUCKET/${file#./public/} \
+              -e cos.ap-guangzhou.myqcloud.com \
+              --meta="Content-Type:$MIME_TYPE#Content-Disposition:inline" \
+              -i $COS_SECRET_ID -k $COS_SECRET_KEY \
+              --delete --init-skip --recursive
+          done
