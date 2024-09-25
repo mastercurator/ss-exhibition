@@ -9,6 +9,7 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    environment: tencent-cos
     env:
       name: tencent-cos
       HUGO_VERSION: 0.128.0
@@ -55,6 +56,6 @@ jobs:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
         run: |
-          echo "COS_SECRET_KEY is set to: ${{ secrets.COS_SECRET_KEY }} ****"
+          echo "COS_SECRET_KEY is set to: ${COS_SECRET_KEY:0:5}****"
           echo "COS_SECRET_KEY is set to: ${COS_SECRET_ID:0:5}****"
           coscli sync ./public/ cos://$COS_BUCKET/ -e cos.ap-guangzhou.myqcloud.com -i $COS_SECRET_ID -k $COS_SECRET_KEY --delete --init-skip --recursive
