@@ -45,7 +45,7 @@ jobs:
       # Step 4: Install Tencent COS CLI tool
       - name: Install COSCLI
         run: |
-          curl -sSL https://github.com/tencentyun/coscli/releases/latest/download/coscli-linux-amd64 -o coscli
+          curl -sSL https://github.com/tencentyun/coscli/releases/download/v0.11.2/coscli-linux-amd64 -o coscli
           chmod +x coscli
           sudo mv coscli /usr/local/bin/coscli
           coscli --version
