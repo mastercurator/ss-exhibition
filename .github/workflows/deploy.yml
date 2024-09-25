@@ -16,7 +16,7 @@ jobs:
 
       # Step 2: 安装 Hugo
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v4
+        uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: '0.88.1'  # 使用的 Hugo 版本
           extended: true
