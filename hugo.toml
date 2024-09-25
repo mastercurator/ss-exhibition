@@ -51,7 +51,7 @@ previewCardImagePlacement = "bottom"
 [[menu.main]]
     name = "Collections"
     url = "/collections/"
-    weight = 
+    weight = 3
 
 [[menu.main]]
     name = "About"
