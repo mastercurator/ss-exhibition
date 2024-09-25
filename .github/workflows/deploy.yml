@@ -10,8 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      name: tencent-cos
       HUGO_VERSION: 0.128.0
-      name: Tencent COS
     steps:
       - name: Install Hugo CLI
         run: |
