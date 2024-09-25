@@ -42,12 +42,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      # Step 4: 安装腾讯云 COS CLI 工具
+      # Step 4: Install Tencent COS CLI tool
       - name: Install COSCLI
         run: |
           curl -sSL https://github.com/tencentyun/coscli/releases/latest/download/coscli-linux-amd64 -o coscli
           chmod +x coscli
-          sudo mv coscli /usr/local/bin/
+          sudo mv coscli /usr/local/bin/coscli
+          coscli --version
 
       # Step 5: 上传到腾讯云 COS
       - name: Deploy to Tencent COS
@@ -57,5 +58,5 @@ jobs:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
         run: |
-          coscmd config -a $COS_SECRET_ID -s $COS_SECRET_KEY -b $COS_BUCKET -r $COS_REGION
-          coscmd upload -rfs --delete public/ /
+          coscli config set -a $COS_SECRET_ID -s $COS_SECRET_KEY -b $COS_BUCKET -r $COS_REGION
+          coscli sync ./public/ cos://$COS_BUCKET/ --delete
