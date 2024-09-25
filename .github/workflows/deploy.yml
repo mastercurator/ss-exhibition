@@ -63,6 +63,5 @@ jobs:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
         run: |
-          coscli config init
-          coscli config add -a $COS_SECRET_ID -k $COS_SECRET_KEY -b $COS_BUCKET -r $COS_REGION
+          coscli config set --secret_id $COS_SECRET_ID --secret_key $COS_SECRET_KEY -b $COS_BUCKET -r $COS_REGION
           coscli sync ./public/ cos://$COS_BUCKET/ --delete
