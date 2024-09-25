@@ -1,0 +1,44 @@
+name: Build and Deploy Hugo to Tencent COS
+
+on:
+  push:
+    branches:
+      - main  # 当推送到 main 分支时触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: 检出 GitHub 仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: 安装 Hugo
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.88.1'  # 使用的 Hugo 版本
+          extended: true
+
+      # Step 3: 构建 Hugo 项目
+      - name: Build Hugo
+        run: hugo --minify
+
+      # Step 4: 安装腾讯云 COS CLI 工具
+      - name: Install COSCLI
+        run: |
+          curl -sSL https://github.com/tencentyun/coscli/releases/latest/download/coscli-linux-amd64 -o coscli
+          chmod +x coscli
+          sudo mv coscli /usr/local/bin/
+
+      # Step 5: 上传到腾讯云 COS
+      - name: Deploy to Tencent COS
+        env:
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_REGION: ${{ secrets.COS_REGION }}
+        run: |
+          coscli config set -a $COS_SECRET_ID -s $COS_SECRET_KEY -b $COS_BUCKET -r $COS_REGION
+          coscli sync ./public/ cos://$COS_BUCKET/ --delete
