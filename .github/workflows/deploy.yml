@@ -12,13 +12,13 @@ jobs:
     steps:
       # Step 1: 检出 GitHub 仓库代码
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       # Step 2: 安装 Hugo
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.88.1'  # 使用的 Hugo 版本
+          hugo-version: 'latest'  # 使用的 Hugo 版本
           extended: true
 
       # Step 3: 构建 Hugo 项目
